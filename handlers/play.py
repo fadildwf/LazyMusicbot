@@ -296,7 +296,7 @@ async def play(_, message: Message):
         file_path = await converter.convert(youtube.download(url))
     else:
         if len(message.command) < 2:
-            return await lel.edit("🧐 **What's the song you want to play?**")
+            return await lel.edit("🧐 **Song not found! Try searching with the correct title\nExample » /play desahan dimobil\n\nChannel : @UserLazyXBot**")
         await lel.edit("🔎 **Finding the song...**")
         query = message.text.split(None, 1)[1]
         # print(query)

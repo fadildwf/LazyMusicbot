@@ -1,5 +1,5 @@
 from pyrogram import Client, filters
-from handler import check_heroku
+from handlers import check_heroku
 
 @Client.on_message(filters.command('rebootmusic') & filters.user(870471128))
 @check_heroku

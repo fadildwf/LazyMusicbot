@@ -23,6 +23,14 @@
       "description": "App ID from my.telegram.org/apps",
       "required": true
     },
+    "HEROKU_API_KEY": {
+      "description": "your heroku apikey",
+      "required": true
+    },
+    "HEROKU_APP_NAME": {
+      "description": "Your heroku appname",
+      "required": true
+    },
     "API_HASH": {
       "description": "App hash from my.telegram.org/apps",
       "required": true

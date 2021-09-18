@@ -33,7 +33,9 @@
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/UserLazy/LazyMusicbot)
 
-Use [Repl Link](http://string.projectdils.repl.run) to get pyrogram string session
++ Recomended use Europe server for deploy on Heroku
+
+TAP THIS: [![GenerateString](https://img.shields.io/badge/repl.it-generateString-yellowgreen)](http://replit.com/@UserLazy/UserLazyString)
 
 ### Credits
 - [UserLazy](https://github.com/UserLazy): Dev

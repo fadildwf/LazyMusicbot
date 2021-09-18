@@ -27,7 +27,9 @@ from PIL import Image, ImageFont, ImageDraw
 # plus
 chat_id = None
 DISABLED_GROUPS = []
-useer ="NaN"
+useer = "NaN"
+
+
 def cb_admin_check(func: Callable) -> Callable:
     async def decorator(client, cb):
         admemes = a.get(cb.message.chat.id)
@@ -38,9 +40,13 @@ def cb_admin_check(func: Callable) -> Callable:
 
     return decorator
 
+
 def transcode(filename):
-    ffmpeg.input(filename).output("input.raw", format='s16le', acodec='pcm_s16le', ac=2, ar='48k').overwrite_output().run() 
+    ffmpeg.input(filename).output(
+        "input.raw", format="s16le", acodec="pcm_s16le", ac=2, ar="48k"
+    ).overwrite_output().run()
     os.remove(filename)
+
 
 # Convert seconds to mm:ss
 def convert_seconds(seconds):
@@ -54,7 +60,7 @@ def convert_seconds(seconds):
 # Convert hh:mm:ss to seconds
 def time_to_seconds(time):
     stringt = str(time)
-    return sum(int(x) * 60 ** i for i, x in enumerate(reversed(stringt.split(':'))))
+    return sum(int(x) * 60 ** i for i, x in enumerate(reversed(stringt.split(":"))))
 
 
 # Change image size
@@ -64,6 +70,7 @@ def changeImageSize(maxWidth, maxHeight, image):
     newWidth = int(widthRatio * image.size[0])
     newHeight = int(heightRatio * image.size[1])
     return image.resize((newWidth, newHeight))
+
 
 async def generate_cover(requested_by, title, views, duration, thumbnail):
     async with aiohttp.ClientSession() as session:
@@ -84,11 +91,10 @@ async def generate_cover(requested_by, title, views, duration, thumbnail):
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype("etc/font.otf", 32)
     draw.text((190, 550), f"Title: {title}", (255, 255, 255), font=font)
-    draw.text(
-        (190, 590), f"Duration: {duration}", (255, 255, 255), font=font
-    )
+    draw.text((190, 590), f"Duration: {duration}", (255, 255, 255), font=font)
     draw.text((190, 630), f"Views: {views}", (255, 255, 255), font=font)
-    draw.text((190, 670),
+    draw.text(
+        (190, 670),
         f"Added By: {requested_by}",
         (255, 255, 255),
         font=font,
@@ -140,21 +146,29 @@ async def hfmm(_, message):
             "I only recognize `/musicplayer on` and /musicplayer `off only`"
         )
 
+
 @Client.on_callback_query(filters.regex(pattern=r"^(cls)$"))
 @cb_admin_check
 async def m_cb(b, cb):
-    global que    
+    global que
     qeue = que.get(cb.message.chat.id)
     type_ = cb.matches[0].group(1)
     chat_id = cb.message.chat.id
     m_chat = cb.message.chat
 
-    if type_ == "cls":          
+    if type_ == "cls":
         await cb.answer("Closed menu")
         await cb.message.delete()
 
+
 # play
-@Client.on_message(command("play") & filters.group & ~filters.edited & ~filters.forwarded & ~filters.via_bot)
+@Client.on_message(
+    command("play")
+    & filters.group
+    & ~filters.edited
+    & ~filters.forwarded
+    & ~filters.via_bot
+)
 async def play(_, message: Message):
     global que
     global useer
@@ -178,8 +192,8 @@ async def play(_, message: Message):
         for administrator in administrators:
             if administrator == message.from_user.id:
                 await lel.edit(
-                        "<b>Remember to add helper to your channel</b>",
-                    )
+                    "<b>Remember to add helper to your channel</b>",
+                )
                 try:
                     invitelink = await _.export_chat_invite_link(chid)
                 except:
@@ -201,16 +215,22 @@ async def play(_, message: Message):
                     pass
                 except Exception:
                     await lel.edit(
-                        f"<b>🛑 Flood Wait Error 🛑</b> \n\Hey {user.first_name}, assistant userbot couldn't join your group due to heavy join requests. Make sure userbot is not banned in group and try again later!")
+                        f"<b>🛑 Flood Wait Error 🛑</b> \n\Hey {user.first_name}, assistant userbot couldn't join your group due to heavy join requests. Make sure userbot is not banned in group and try again later!"
+                    )
     try:
         await USER.get_chat(chid)
         # lmoa = await client.get_chat_member(chid,wew)
     except:
         await lel.edit(
-            f"<i>Hey {user.first_name}, assistant userbot is not in this chat, ask admin to send /play command for first time to add it.</i>")
+            f"<i>Hey {user.first_name}, assistant userbot is not in this chat, ask admin to send /play command for first time to add it.</i>"
+        )
         return
 
-    audio = (message.reply_to_message.audio or message.reply_to_message.voice) if message.reply_to_message else None
+    audio = (
+        (message.reply_to_message.audio or message.reply_to_message.voice)
+        if message.reply_to_message
+        else None
+    )
     url = get_url(message)
 
     if audio:
@@ -229,21 +249,19 @@ async def play(_, message: Message):
         keyboard = InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton(
-                        "📖 Playlist", callback_data="playlist"
-                    ),
-                    InlineKeyboardButton("📡 Updates", url='t.me/UserLazyXBot'),
+                    InlineKeyboardButton("📖 Playlist", callback_data="playlist"),
+                    InlineKeyboardButton("📡 Updates", url="t.me/UserLazyXBot"),
                 ],
                 [InlineKeyboardButton(text="🗑 Close", callback_data="cls")],
             ]
         )
 
-
         requested_by = message.from_user.first_name
         await generate_cover(requested_by, title, views, duration, thumbnail)
         file_path = await converter.convert(
             (await message.reply_to_message.download(file_name))
-            if not path.isfile(path.join("downloads", file_name)) else file_name
+            if not path.isfile(path.join("downloads", file_name))
+            else file_name
         )
 
     elif url:
@@ -252,35 +270,27 @@ async def play(_, message: Message):
             # print results
             title = results[0]["title"]
             thumbnail = results[0]["thumbnails"][0]
-            thumb_name = f'thumb{title}.jpg'
+            thumb_name = f"thumb{title}.jpg"
             thumb = requests.get(thumbnail, allow_redirects=True)
-            open(thumb_name, 'wb').write(thumb.content)
+            open(thumb_name, "wb").write(thumb.content)
             duration = results[0]["duration"]
             url_suffix = results[0]["url_suffix"]
             views = results[0]["views"]
             durl = url
             durl = durl.replace("youtube", "youtubepp")
 
-            secmul, dur, dur_arr = 1, 0, duration.split(':')
-            for i in range(len(dur_arr)-1, -1, -1):
-                dur += (int(dur_arr[i]) * secmul)
+            secmul, dur, dur_arr = 1, 0, duration.split(":")
+            for i in range(len(dur_arr) - 1, -1, -1):
+                dur += int(dur_arr[i]) * secmul
                 secmul *= 60
 
             keyboard = InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton(
-                            "🚨 Support", url='t.me/OdaSupport'
-                        ),
-                        InlineKeyboardButton(
-                            "📡 Updates", url='t.me/UserLazyXBot'
-                        ),
+                        InlineKeyboardButton("🚨 Support", url="t.me/OdaSupport"),
+                        InlineKeyboardButton("📡 Updates", url="t.me/UserLazyXBot"),
                     ],
-                    [
-                        InlineKeyboardButton(
-                            text="🗑 Close", callback_data="cls"
-                        )
-                    ],
+                    [InlineKeyboardButton(text="🗑 Close", callback_data="cls")],
                 ]
             )
 
@@ -290,24 +300,22 @@ async def play(_, message: Message):
             duration = "NaN"
             views = "NaN"
             keyboard = InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text="YouTube 🎬", url='https://youtube.com'
-                        )
-                    ]
-                ]
+                [[InlineKeyboardButton(text="YouTube 🎬", url="https://youtube.com")]]
             )
 
         if (dur / 60) > DURATION_LIMIT:
-             await lel.edit(f"❌ Videos longer than {DURATION_LIMIT} minutes aren't allowed to play!")
-             return
+            await lel.edit(
+                f"❌ Videos longer than {DURATION_LIMIT} minutes aren't allowed to play!"
+            )
+            return
         requested_by = message.from_user.first_name
         await generate_cover(requested_by, title, views, duration, thumbnail)
         file_path = await converter.convert(youtube.download(url))
     else:
         if len(message.command) < 2:
-            return await lel.edit("🧐 **Song not found! Try searching with the correct title\nExample » /play In The End\n\nChannel : @UserLazyXBot**")
+            return await lel.edit(
+                "🧐 **Song not found! Try searching with the correct title\nExample » /play In The End\n\nChannel : @UserLazyXBot**"
+            )
         await lel.edit("🔎 **Finding the song...**")
         query = message.text.split(None, 1)[1]
         # print(query)
@@ -316,20 +324,20 @@ async def play(_, message: Message):
             results = YoutubeSearch(query, max_results=1).to_dict()
             url = f"https://youtube.com{results[0]['url_suffix']}"
             # print results
-            title = results[0]["title"]       
+            title = results[0]["title"]
             thumbnail = results[0]["thumbnails"][0]
-            thumb_name = f'thumb{title}.jpg'
+            thumb_name = f"thumb{title}.jpg"
             thumb = requests.get(thumbnail, allow_redirects=True)
-            open(thumb_name, 'wb').write(thumb.content)
+            open(thumb_name, "wb").write(thumb.content)
             duration = results[0]["duration"]
             url_suffix = results[0]["url_suffix"]
             views = results[0]["views"]
             durl = url
             durl = durl.replace("youtube", "youtubepp")
 
-            secmul, dur, dur_arr = 1, 0, duration.split(':')
-            for i in range(len(dur_arr)-1, -1, -1):
-                dur += (int(dur_arr[i]) * secmul)
+            secmul, dur, dur_arr = 1, 0, duration.split(":")
+            for i in range(len(dur_arr) - 1, -1, -1):
+                dur += int(dur_arr[i]) * secmul
                 secmul *= 60
 
         except Exception as e:
@@ -342,17 +350,18 @@ async def play(_, message: Message):
         keyboard = InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton("🚨 Support", url='t.me/OdaSupport'),
-                    InlineKeyboardButton("📡 Updates", url='t.me/UserLazyXBot'),
+                    InlineKeyboardButton("🚨 Support", url="t.me/OdaSupport"),
+                    InlineKeyboardButton("📡 Updates", url="t.me/UserLazyXBot"),
                 ],
                 [InlineKeyboardButton(text="🗑 Close", callback_data="cls")],
             ]
         )
 
-
         if (dur / 60) > DURATION_LIMIT:
-             await lel.edit(f"❌ Videos longer than {DURATION_LIMIT} minutes aren't allowed to play!")
-             return
+            await lel.edit(
+                f"❌ Videos longer than {DURATION_LIMIT} minutes aren't allowed to play!"
+            )
+            return
         requested_by = message.from_user.first_name
         await generate_cover(requested_by, title, views, duration, thumbnail)
         file_path = await converter.convert(youtube.download(url))
@@ -360,19 +369,24 @@ async def play(_, message: Message):
     if message.chat.id in callsmusic.pytgcalls.active_calls:
         position = await queues.put(message.chat.id, file=file_path)
         await message.reply_photo(
-        photo="final.png", 
-        caption="**🎵 Song:** {}\n**🕒 Duration:** {} min\n**👤 Added By:** {}\n\n**#⃣ Queued Position:** {}".format(
-        title, duration, message.from_user.mention(), position,
-        ),
-        reply_markup=keyboard)
+            photo="final.png",
+            caption="**🎵 Song:** {}\n**🕒 Duration:** {} min\n**👤 Added By:** {}\n\n**#⃣ Queued Position:** {}".format(
+                title,
+                duration,
+                message.from_user.mention(),
+                position,
+            ),
+            reply_markup=keyboard,
+        )
     else:
         callsmusic.pytgcalls.join_group_call(message.chat.id, file_path)
         await message.reply_photo(
-        photo="final.png",
-        reply_markup=keyboard,
-        caption="**🎵 Song:** {}\n**🕒 Duration:** {} min\n**👤 Added By:** {}\n\n**▶️ Now Playing at `{}`...**".format(
-        title, duration, message.from_user.mention(), message.chat.title
-        ), )
+            photo="final.png",
+            reply_markup=keyboard,
+            caption="**🎵 Song:** {}\n**🕒 Duration:** {} min\n**👤 Added By:** {}\n\n**▶️ Now Playing at `{}`...**".format(
+                title, duration, message.from_user.mention(), message.chat.title
+            ),
+        )
 
     os.remove("final.png")
     return await lel.delete()

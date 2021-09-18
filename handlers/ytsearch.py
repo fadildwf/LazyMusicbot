@@ -16,6 +16,7 @@ import pyrogram
 
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
+
 @app.on_message(pyrogram.filters.command(["search"]))
 async def ytsearch(_, message: Message):
     try:

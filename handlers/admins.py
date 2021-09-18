@@ -32,9 +32,9 @@ async def resume(_, message: Message):
 @authorized_users_only
 async def stop(_, message: Message):
     try:
-       callsmusic.queues.clear(message.chat.id)
+        callsmusic.queues.clear(message.chat.id)
     except QueueEmpty:
-       pass
+        pass
 
     callsmusic.pytgcalls.leave_group_call(message.chat.id)
     await message.reply_text("❌ **Stop the Song!**")
@@ -74,9 +74,7 @@ async def admincache(client, message: Message):
         message.chat.id,
         (
             member.user
-            for member in await message.chat.get_members(
-                filter="administrators"
-            )
+            for member in await message.chat.get_members(filter="administrators")
         ),
     )
 

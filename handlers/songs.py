@@ -20,6 +20,7 @@ from youtube_dl.utils import (
     XAttrMetadataError,
 )
 
+
 @Client.on_message(filters.command("song") & ~filters.edited)
 async def song(client, message):
     cap = "@OdaRobot"
@@ -92,13 +93,14 @@ async def song(client, message):
         return
     time.time()
     if song:
-        await rkp.edit("Uploading...") #levina-lab
+        await rkp.edit("Uploading...")  # levina-lab
         lol = "./etc/thumb.jpg"
         lel = await message.reply_audio(
-                 f"{rip_data['id']}.mp3",
-                 duration=int(rip_data["duration"]),
-                 title=str(rip_data["title"]),
-                 performer=str(rip_data["uploader"]),
-                 thumb=lol,
-                 caption=cap)  #veezmusicbot
+            f"{rip_data['id']}.mp3",
+            duration=int(rip_data["duration"]),
+            title=str(rip_data["title"]),
+            performer=str(rip_data["uploader"]),
+            thumb=lol,
+            caption=cap,
+        )  # veezmusicbot
         await rkp.delete()

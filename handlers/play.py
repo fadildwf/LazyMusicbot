@@ -159,6 +159,7 @@ async def play(_, message: Message):
     global que
     global useer
     if message.chat.id in DISABLED_GROUPS:
+        await message.reply("**Musicplayer is Disable, ask admin for Enable it!**")
         return
     lel = await message.reply("🔄 **Processing...**")
 
@@ -306,7 +307,7 @@ async def play(_, message: Message):
         file_path = await converter.convert(youtube.download(url))
     else:
         if len(message.command) < 2:
-            return await lel.edit("🧐 **Song not found! Try searching with the correct title\nExample » /play desahan dimobil\n\nChannel : @UserLazyXBot**")
+            return await lel.edit("🧐 **Song not found! Try searching with the correct title\nExample » /play In The End\n\nChannel : @UserLazyXBot**")
         await lel.edit("🔎 **Finding the song...**")
         query = message.text.split(None, 1)[1]
         # print(query)

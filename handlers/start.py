@@ -9,23 +9,23 @@ from config import BOT_USERNAME, ASSISTANT_USERNAME, BOT_NAME
 START_TIME = datetime.utcnow()
 START_TIME_ISO = START_TIME.replace(microsecond=0).isoformat()
 TIME_DURATION_UNITS = (
-    ('week', 60 * 60 * 24 * 7),
-    ('day', 60 * 60 * 24),
-    ('hour', 60 * 60),
-    ('min', 60),
-    ('sec', 1)
+    ("week", 60 * 60 * 24 * 7),
+    ("day", 60 * 60 * 24),
+    ("hour", 60 * 60),
+    ("min", 60),
+    ("sec", 1),
 )
+
 
 async def _human_time_duration(seconds):
     if seconds == 0:
-        return 'inf'
+        return "inf"
     parts = []
     for unit, div in TIME_DURATION_UNITS:
         amount, seconds = divmod(int(seconds), div)
         if amount > 0:
-            parts.append('{} {}{}'
-                         .format(amount, unit, "" if amount == 1 else "s"))
-    return ', '.join(parts)
+            parts.append("{} {}{}".format(amount, unit, "" if amount == 1 else "s"))
+    return ", ".join(parts)
 
 
 @Client.on_message(command("start") & filters.private & ~filters.edited)
@@ -42,25 +42,30 @@ I Have Many Practical Features Like:
 Type » /help « To View List of Commands!
 </b>""",
         reply_markup=InlineKeyboardMarkup(
-            [ 
+            [
                 [
                     InlineKeyboardButton(
-                        "➕ Tambahkan Ke Group ➕", url=f"https://t.me/{BOT_USERNAME}?startgroup=true")
-                  ],[
+                        "➕ Tambahkan Ke Group ➕",
+                        url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
+                    )
+                ],
+                [
                     InlineKeyboardButton(
-                         "🤖 Assistant", url=f"https://t.me/{ASSISTANT_USERNAME}"
+                        "🤖 Assistant", url=f"https://t.me/{ASSISTANT_USERNAME}"
                     ),
                     InlineKeyboardButton(
                         "🛠 Repo", url="https://github.com/UserLazy/LazyMusicbot"
-                    )
-                ]
+                    ),
+                ],
             ]
         ),
-     disable_web_page_preview=True
+        disable_web_page_preview=True,
     )
 
 
-@Client.on_message(command(["start", f"start@{BOT_USERNAME}"]) & filters.group & ~filters.edited)
+@Client.on_message(
+    command(["start", f"start@{BOT_USERNAME}"]) & filters.group & ~filters.edited
+)
 async def start(client: Client, message: Message):
     current_time = datetime.utcnow()
     uptime_sec = (current_time - START_TIME).total_seconds()
@@ -73,12 +78,10 @@ async def start(client: Client, message: Message):
                     InlineKeyboardButton(
                         "🛠 Repo", url="https://github.com/UserLazy/LazyMusicbot"
                     ),
-                    InlineKeyboardButton(
-                        "💬 Group", url="https://t.me/OdaSupport"
-                    )
+                    InlineKeyboardButton("💬 Group", url="https://t.me/OdaSupport"),
                 ]
             ]
-        )
+        ),
     )
 
 
@@ -100,15 +103,11 @@ async def help(client: Client, message: Message):
         reply_markup=InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton(
-                        "Group", url="https://t.me/OdaSupport"
-                    ),
-                    InlineKeyboardButton(
-                        "Updates", url="https://t.me/UserLazyXBot"
-                    )
+                    InlineKeyboardButton("Group", url="https://t.me/OdaSupport"),
+                    InlineKeyboardButton("Updates", url="https://t.me/UserLazyXBot"),
                 ]
             ]
-        )
+        ),
     )
 
 
@@ -117,19 +116,16 @@ async def ping_pong(client: Client, m: Message):
     start = time()
     m_reply = await m.reply_text("Pinging...")
     delta_ping = time() - start
-    await m_reply.edit_text(
-        f"🏓 **PONG!!**\n"
-        f"`{delta_ping * 1000:.3f} ms`"
-    )
+    await m_reply.edit_text(f"🏓 **PONG!!**\n" f"`{delta_ping * 1000:.3f} ms`")
 
 
-@Client.on_message(command(["uptime", f"uptime@{BOT_USERNAME}"]) & sudo_only & ~filters.edited)
+@Client.on_message(
+    command(["uptime", f"uptime@{BOT_USERNAME}"]) & sudo_only & ~filters.edited
+)
 async def get_uptime(client: Client, m: Message):
     current_time = datetime.utcnow()
     uptime_sec = (current_time - START_TIME).total_seconds()
     uptime = await _human_time_duration(int(uptime_sec))
     await m.reply_text(
-        f"🤖\n"
-        f"• **Uptime:** `{uptime}`\n"
-        f"• **Start Time:** `{START_TIME_ISO}`"
+        f"🤖\n" f"• **Uptime:** `{uptime}`\n" f"• **Start Time:** `{START_TIME_ISO}`"
     )

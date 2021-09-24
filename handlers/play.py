@@ -208,7 +208,7 @@ async def play(_, message: Message):
                         message.chat.id, "Oda joined this group for playing music in VC"
                     )
                     await lel.edit(
-                        "<b>Oda Assistent joined this chat</b>",
+                        "<b>Assistant Assistent joined this chat</b>",
                     )
 
                 except UserAlreadyParticipant:

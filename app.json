@@ -48,6 +48,10 @@
       "description": "USERNAME BOT",
       "required": true
     },
+    "OWNER_ID": {
+      "description": "Owner userid",
+      "required": true
+    },
     "ASSISTANT_USERNAME": {
       "description": "USERNAME ASSISTANT",
       "required": true

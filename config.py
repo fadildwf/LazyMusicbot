@@ -10,12 +10,12 @@ BOT_TOKEN = getenv("BOT_TOKEN")
 BOT_NAME = getenv("BOT_NAME")
 HEROKU_API_KEY = getenv("HEROKU_API_KEY")
 HEROKU_APP_NAME = getenv("HEROKU_APP_NAME")
-ASSISTANT_USERNAME = getenv("ASSISTANT_USERNAME")
-BOT_USERNAME = getenv("BOT_USERNAME")
 
 admins = {}
 API_ID = int(getenv("API_ID"))
 API_HASH = getenv("API_HASH")
+
+OWNER_ID = int(getenv("OWNER_ID"))
 
 DURATION_LIMIT = int(getenv("DURATION_LIMIT", "10"))
 

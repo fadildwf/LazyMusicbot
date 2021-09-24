@@ -17,6 +17,8 @@ admins = {}
 API_ID = int(getenv("API_ID"))
 API_HASH = getenv("API_HASH")
 
+OWNER_ID = int(getenv("OWNER_ID"))
+
 DURATION_LIMIT = int(getenv("DURATION_LIMIT", "10"))
 
 COMMAND_PREFIXES = list(getenv("COMMAND_PREFIXES", "/ !").split())

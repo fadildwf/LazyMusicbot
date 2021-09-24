@@ -44,12 +44,8 @@
       "required": true,
       "value": "10"
     },
-    "BOT_USERNAME": {
-      "description": "USERNAME BOT",
-      "required": true
-    },
-    "ASSISTANT_USERNAME": {
-      "description": "USERNAME ASSISTANT",
+    "OWNER_ID": {
+      "description": "App ID from my.telegram.org/apps",
       "required": true
     }
   }

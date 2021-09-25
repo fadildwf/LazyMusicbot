@@ -170,7 +170,6 @@ async def m_cb(b, cb):
     & ~filters.forwarded
     & ~filters.via_bot
 )
-@authorized_users_only
 async def play(_, message: Message):
     global que
     global useer

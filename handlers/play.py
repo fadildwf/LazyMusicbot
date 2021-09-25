@@ -33,7 +33,7 @@ useer = "NaN"
 def cb_admin_check(func: Callable) -> Callable:
     async def decorator(client, cb):
         admemes = a.get(cb.message.chat.id)
-        if cb.from_user.id in admemes or in SUDO_USERS:
+        if cb.from_user.id in admemes or cb.from_user.id in SUDO_USERS:
             return await func(client, cb)
         await cb.answer("You ain't allowed!", show_alert=True)
         return

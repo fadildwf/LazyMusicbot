@@ -13,7 +13,7 @@ import youtube_dl
 from youtube_search import YoutubeSearch
 import converter
 from downloaders import youtube
-from config import DURATION_LIMIT, que
+from config import DURATION_LIMIT, que, SUDO_USERS
 from cache.admins import admins as a
 from helpers.filters import command
 from helpers.decorators import errors, authorized_users_only
@@ -33,7 +33,7 @@ useer = "NaN"
 def cb_admin_check(func: Callable) -> Callable:
     async def decorator(client, cb):
         admemes = a.get(cb.message.chat.id)
-        if cb.from_user.id in admemes:
+        if cb.from_user.id in admemes or cb.from_user.id in SUDO_USERS:
             return await func(client, cb)
         await cb.answer("You ain't allowed!", show_alert=True)
         return
@@ -149,6 +149,7 @@ async def hfmm(_, message):
 
 @Client.on_callback_query(filters.regex(pattern=r"^(cls)$"))
 @cb_admin_check
+@authorized_users_only
 async def m_cb(b, cb):
     global que
     qeue = que.get(cb.message.chat.id)
@@ -192,7 +193,7 @@ async def play(_, message: Message):
         for administrator in administrators:
             if administrator == message.from_user.id:
                 await lel.edit(
-                    "<b>Remember to add helper to your channel</b>",
+                    "<b>Remember to add Assistant to your channel</b>",
                 )
                 try:
                     invitelink = await _.export_chat_invite_link(chid)
@@ -205,10 +206,10 @@ async def play(_, message: Message):
                 try:
                     await USER.join_chat(invitelink)
                     await USER.send_message(
-                        message.chat.id, "Oda joined this group for playing music in VC"
+                        message.chat.id, "Assistant joined this group for playing music in VC"
                     )
                     await lel.edit(
-                        "<b>Assistant Assistent joined this chat</b>",
+                        "<b>Assistant joined this chat</b>",
                     )
 
                 except UserAlreadyParticipant:

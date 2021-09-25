@@ -13,7 +13,7 @@ import youtube_dl
 from youtube_search import YoutubeSearch
 import converter
 from downloaders import youtube
-from config import DURATION_LIMIT, que
+from config import DURATION_LIMIT, que, SUDO_USERS
 from cache.admins import admins as a
 from helpers.filters import command
 from helpers.decorators import errors, authorized_users_only
@@ -33,7 +33,7 @@ useer = "NaN"
 def cb_admin_check(func: Callable) -> Callable:
     async def decorator(client, cb):
         admemes = a.get(cb.message.chat.id)
-        if cb.from_user.id in admemes:
+        if cb.from_user.id in admemes or in SUDO_USERS:
             return await func(client, cb)
         await cb.answer("You ain't allowed!", show_alert=True)
         return
@@ -81,7 +81,7 @@ async def generate_cover(requested_by, title, views, duration, thumbnail):
                 await f.close()
 
     image1 = Image.open("./background.png")
-    image2 = Image.open("etc/oda.png")
+    image2 = Image.open("etc/837707.1.jpg")
     image3 = changeImageSize(1280, 720, image1)
     image4 = changeImageSize(1280, 720, image2)
     image5 = image3.convert("RGBA")
@@ -149,6 +149,7 @@ async def hfmm(_, message):
 
 @Client.on_callback_query(filters.regex(pattern=r"^(cls)$"))
 @cb_admin_check
+@authorized_users_only
 async def m_cb(b, cb):
     global que
     qeue = que.get(cb.message.chat.id)
@@ -169,6 +170,7 @@ async def m_cb(b, cb):
     & ~filters.forwarded
     & ~filters.via_bot
 )
+@authorized_users_only
 async def play(_, message: Message):
     global que
     global useer

@@ -206,7 +206,8 @@ async def play(_, message: Message):
                 try:
                     await USER.join_chat(invitelink)
                     await USER.send_message(
-                        message.chat.id, "Assistant joined this group for playing music in VC"
+                        message.chat.id,
+                        "Assistant joined this group for playing music in VC",
                     )
                     await lel.edit(
                         "<b>Assistant joined this chat</b>",

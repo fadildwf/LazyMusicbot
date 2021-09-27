@@ -2,7 +2,7 @@ from typing import List, Union
 
 from pyrogram import filters
 
-from config import COMMAND_PREFIXES
+from config import COMMAND_PREFIXES, SUDO_USERS
 
 other_filters = filters.group & ~filters.edited & ~filters.via_bot & ~filters.forwarded
 other_filters2 = (

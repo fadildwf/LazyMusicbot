@@ -105,7 +105,7 @@ async def generate_cover(requested_by, title, views, duration, thumbnail):
 
 
 @Client.on_message(
-    command("musicplayer") & ~filters.edited & ~filters.bot & ~filters.private
+    command(["musicplayer", "musicplayer@OdaRobot"]) & ~filters.edited & ~filters.bot & ~filters.private
 )
 @authorized_users_only
 async def hfmm(_, message):
@@ -128,7 +128,7 @@ async def hfmm(_, message):
             return
         DISABLED_GROUPS.remove(message.chat.id)
         await lel.edit(
-            f"Music Player Successfully Enabled For Users In The Chat {message.chat.id}"
+            f"Music Player Successfully Enabled in **{message.chat.title}**"
         )
 
     elif status in ["OFF", "off", "Off"]:
@@ -139,7 +139,7 @@ async def hfmm(_, message):
             return
         DISABLED_GROUPS.append(message.chat.id)
         await lel.edit(
-            f"Music Player Successfully Deactivated For Users In The Chat {message.chat.id}"
+            f"Music Player Successfully Deactivated in **{message.chat.title}**"
         )
     else:
         await message.reply_text(
@@ -161,10 +161,41 @@ async def m_cb(b, cb):
         await cb.answer("Closed menu")
         await cb.message.delete()
 
+        
+@Client.on_message(
+    command(["playlist", "playlist@OdaRobot"]) & filters.group & ~filters.edited
+)
+@authorized_users_only
+async def playlist(client, message):
+    global que
+    if message.chat.id in DISABLED_GROUPS:
+        return
+    queue = que.get(message.chat.id)
+    if not queue:
+        await message.reply_text("❌ **no music is currently playing**")
+    temp = []
+    for t in queue:
+        temp.append(t)
+    now_playing = temp[0][0]
+    by = temp[0][1].mention(style="md")
+    msg = "💡 Now playing on **{}**".format(message.chat.title)
+    msg += "\n\n• " + now_playing
+    msg += "\n• Req By " + by
+    temp.pop(0)
+    if temp:
+        msg += "\n\n"
+        msg += "**Queued Song**"
+        for song in temp:
+            name = song[0]
+            usr = song[1].mention(style="md")
+            msg += f"\n• {name}"
+            msg += f"\n• Req by {usr}\n"
+    await message.reply_text(msg)
+    
 
 # play
 @Client.on_message(
-    command("play")
+    command(["play", "play@OdaRobot"])
     & filters.group
     & ~filters.edited
     & ~filters.forwarded

@@ -105,7 +105,10 @@ async def generate_cover(requested_by, title, views, duration, thumbnail):
 
 
 @Client.on_message(
-    command(["musicplayer", "musicplayer@OdaRobot"]) & ~filters.edited & ~filters.bot & ~filters.private
+    command(["musicplayer", "musicplayer@OdaRobot"])
+    & ~filters.edited
+    & ~filters.bot
+    & ~filters.private
 )
 @authorized_users_only
 async def hfmm(_, message):
@@ -127,9 +130,7 @@ async def hfmm(_, message):
             await lel.edit("Music Player Already Activated In This Chat")
             return
         DISABLED_GROUPS.remove(message.chat.id)
-        await lel.edit(
-            f"Music Player Successfully Enabled in **{message.chat.title}**"
-        )
+        await lel.edit(f"Music Player Successfully Enabled in **{message.chat.title}**")
 
     elif status in ["OFF", "off", "Off"]:
         lel = await message.reply("`Processing...`")
@@ -161,7 +162,7 @@ async def m_cb(b, cb):
         await cb.answer("Closed menu")
         await cb.message.delete()
 
-        
+
 @Client.on_message(
     command(["playlist", "playlist@OdaRobot"]) & filters.group & ~filters.edited
 )
@@ -191,7 +192,7 @@ async def playlist(client, message):
             msg += f"\n• {name}"
             msg += f"\n• Req by {usr}\n"
     await message.reply_text(msg)
-    
+
 
 # play
 @Client.on_message(

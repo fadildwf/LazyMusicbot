@@ -242,10 +242,10 @@ async def play(_, message: Message):
             )
 
         file_name = get_file_name(audio)
-        title = file_name
+        title = audio.title
         thumb_name = "https://telegra.ph/file/a7adee6cf365d74734c5d.png"
         thumbnail = thumb_name
-        duration = round(audio.duration / 60)
+        duration = round(audio.duration)
         views = "Locally added"
 
         keyboard = InlineKeyboardMarkup(
@@ -323,7 +323,7 @@ async def play(_, message: Message):
         # print(query)
         await lel.edit("🎵 **Processing sounds...**")
         try:
-            results = YoutubeSearch(query, max_results=1).to_dict()
+            results = YoutubeSearch(query, max_results=5).to_dict()
             url = f"https://youtube.com{results[0]['url_suffix']}"
             # print results
             title = results[0]["title"]

@@ -245,7 +245,7 @@ async def play(_, message: Message):
         title = audio.title
         thumb_name = "https://telegra.ph/file/a7adee6cf365d74734c5d.png"
         thumbnail = thumb_name
-        duration = round(audio.duration)
+        duration = round(audio.duration / 60)
         views = "Locally added"
 
         keyboard = InlineKeyboardMarkup(
@@ -268,7 +268,7 @@ async def play(_, message: Message):
 
     elif url:
         try:
-            results = YoutubeSearch(url, max_results=1).to_dict()
+            results = YoutubeSearch(url, max_results=5).to_dict()
             # print results
             title = results[0]["title"]
             thumbnail = results[0]["thumbnails"][0]
